@@ -1,7 +1,7 @@
 const crypto = require('crypto');
 
 /**
- * Middleware for generating secure, time-limited URLs for videos
+ * Simple middleware for generating secure video URLs
  */
 const secureVideo = {
   /**
@@ -84,9 +84,6 @@ const secureVideo = {
   
   /**
    * Middleware to verify a secure video URL
-   * @param {object} req - Express request object
-   * @param {object} res - Express response object
-   * @param {function} next - Express next middleware function
    */
   verifySecureUrl: (req, res, next) => {
     const { token } = req.query;

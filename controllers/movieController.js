@@ -456,15 +456,10 @@ exports.getSecureVideoUrl = async (req, res) => {
       });
     }
     
-    // Default expiry is 1 hour (3600 seconds)
-    // Can be adjusted based on requirements
-    const expiresIn = 3600;
-    
     // Generate a secure URL with a 1-hour expiry
     const secureUrlData = generateSecureUrl(
       movie._id.toString(),
-      movie.videoUrl,
-      expiresIn
+      movie.videoUrl
     );
     
     res.status(200).json({
@@ -476,15 +471,6 @@ exports.getSecureVideoUrl = async (req, res) => {
     });
   } catch (error) {
     console.error('Error generating secure video URL:', error);
-    
-    // Handle invalid ID
-    if (error.kind === 'ObjectId') {
-      return res.status(404).json({
-        success: false,
-        message: 'Movie not found'
-      });
-    }
-    
     res.status(500).json({
       success: false,
       message: 'Server error'

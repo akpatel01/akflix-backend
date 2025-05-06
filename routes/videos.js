@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const { verifySecureUrl } = require('../middlewares/secureVideo');
-const fetch = require('node-fetch');
 const http = require('http');
 const https = require('https');
 const url = require('url');
