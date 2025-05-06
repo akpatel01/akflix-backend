@@ -1,4 +1,5 @@
 const Movie = require('../models/Movie');
+const { generateSecureUrl } = require('../middlewares/secureVideo');
 
 // @desc    Get all movies
 // @route   GET /api/movies
@@ -429,6 +430,64 @@ exports.getSubcategories = async (req, res) => {
       success: false,
       message: 'Server error while fetching subcategories',
       error: error.message
+    });
+  }
+};
+
+// @desc    Get a secure video URL for a movie
+// @route   GET /api/movies/:id/secure-video
+// @access  Private (requires authentication)
+exports.getSecureVideoUrl = async (req, res) => {
+  try {
+    const movie = await Movie.findById(req.params.id);
+    
+    if (!movie) {
+      return res.status(404).json({
+        success: false,
+        message: 'Movie not found'
+      });
+    }
+    
+    // Check if movie has a video URL
+    if (!movie.videoUrl) {
+      return res.status(404).json({
+        success: false,
+        message: 'No video available for this movie'
+      });
+    }
+    
+    // Default expiry is 1 hour (3600 seconds)
+    // Can be adjusted based on requirements
+    const expiresIn = 3600;
+    
+    // Generate a secure URL with a 1-hour expiry
+    const secureUrlData = generateSecureUrl(
+      movie._id.toString(),
+      movie.videoUrl,
+      expiresIn
+    );
+    
+    res.status(200).json({
+      success: true,
+      data: {
+        secureUrl: secureUrlData.secureUrl,
+        expiresAt: secureUrlData.expiresAt
+      }
+    });
+  } catch (error) {
+    console.error('Error generating secure video URL:', error);
+    
+    // Handle invalid ID
+    if (error.kind === 'ObjectId') {
+      return res.status(404).json({
+        success: false,
+        message: 'Movie not found'
+      });
+    }
+    
+    res.status(500).json({
+      success: false,
+      message: 'Server error'
     });
   }
 }; 

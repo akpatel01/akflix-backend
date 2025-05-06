@@ -10,7 +10,8 @@ const {
   getStats,
   incrementViewCount,
   getCategories,
-  getSubcategories
+  getSubcategories,
+  getSecureVideoUrl
 } = require('../controllers/movieController');
 const { protect, isAdmin } = require('../middlewares/auth');
 
@@ -32,6 +33,9 @@ router.get('/categories/:category', getSubcategories);
 router.get('/stats', getStats);
 router.get('/:id', getMovie);
 router.post('/:id/view', incrementViewCount);
+
+// Protected video routes - requires authenticated user
+router.get('/:id/secure-video', protect, getSecureVideoUrl);
 
 // Admin only routes
 router.post('/', protect, isAdmin, createMovie);

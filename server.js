@@ -60,11 +60,13 @@ app.use((req, res, next) => {
 const movieRoutes = require('./routes/movies');
 const userRoutes = require('./routes/users');
 const authRoutes = require('./routes/auth');
+const videoRoutes = require('./routes/videos');
 
 // Use routes
 app.use('/api/movies', movieRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/videos', videoRoutes);
 
 // Default route
 app.get('/', (req, res) => {
