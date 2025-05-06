@@ -29,7 +29,7 @@ router.get('/', getMovies);
 router.get('/featured', getFeaturedMovies);
 router.get('/categories', getCategories);
 router.get('/categories/:category', getSubcategories);
-router.get('/stats', protect, isAdmin, getStats);
+router.get('/stats', protect, getStats);
 router.get('/:id', getMovie);
 router.post('/:id/view', incrementViewCount);
 
