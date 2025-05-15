@@ -85,8 +85,8 @@ exports.register = async (req, res) => {
       username,
       email,
       password,
-      // Use provided profile pic or generate a random one
-      profilePic: profilePic || `https://i.pravatar.cc/150?img=${Math.floor(Math.random() * 70)}`
+      // Use provided profile pic or a default avatar
+      profilePic: profilePic || '/uploads/profiles/default-avatar.png'
     });
     
     console.log('User created successfully:', { id: user._id, username: user.username });

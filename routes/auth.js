@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { register, login, getMe } = require('../controllers/authController');
 const { protect } = require('../middlewares/auth');
+const { profileUpload } = require('../middlewares/upload');
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 
@@ -11,6 +12,36 @@ router.post('/login', login);
 
 // Protected routes
 router.get('/me', protect, getMe);
+
+// Upload profile image route
+router.post('/upload-profile-image', profileUpload, (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({
+        success: false,
+        message: 'No file uploaded'
+      });
+    }
+
+    // Create file URL
+    const fileUrl = `${req.protocol}://${req.get('host')}/uploads/profiles/${req.file.filename}`;
+    
+    res.status(200).json({
+      success: true,
+      message: 'File uploaded successfully',
+      file: {
+        filename: req.file.filename,
+        url: fileUrl
+      }
+    });
+  } catch (error) {
+    console.error('File upload error:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Error uploading file'
+    });
+  }
+});
 
 // Create admin user with custom credentials - protected by setup key
 router.post('/create-admin', async (req, res) => {

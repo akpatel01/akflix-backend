@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const path = require('path');
 
 // Define environment variables directly
 const PORT = 5000;
@@ -30,6 +31,9 @@ const app = express();
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+// Serve static files from the uploads directory
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Debug middleware to log all requests
 app.use((req, res, next) => {
